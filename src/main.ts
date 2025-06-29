@@ -34,12 +34,24 @@ const getData = () => {
 if (image && ctx) {
   if (image.complete) {
     ctx.drawImage(image, 0, 0, 100, 100);
-    colorArray = getData()
+    getPalette()
   }
   image.addEventListener("load", () => {
     ctx.drawImage(image, 0, 0, 100, 100);
-    colorArray = getData()
+    getPalette()
   })
+}
+
+function getPalette() {
+  colorArray = getData()
+  chooseCentroid()
+}
+
+function chooseCentroid() {
+  let centroid = 3;
+  for(let i=0; i<centroid; ++i) {
+    let test = Math.floor(Math.random() * 9999)
+  }
 }
 
 
