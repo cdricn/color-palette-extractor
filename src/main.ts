@@ -18,15 +18,15 @@ const ctx = canvas.getContext("2d");
 const image = document.getElementById("source") as HTMLImageElement;
 let colorArray;
 
-const getData = () => {
+function getColors() {
   let imageColorData = ctx!.getImageData(0, 0, 100, 100)
-  let colorDataArray = new Array(10000);
+  let colorDataArray = [];
 
   for(let i=0; i<imageColorData.data.length; i+=4) {
     let r = imageColorData.data[i];
     let g = imageColorData.data[i+1];
     let b = imageColorData.data[i+2];
-    colorDataArray[i] = [r, g, b]
+    colorDataArray.push([r, g, b])
   }
   return colorDataArray;
 }
@@ -43,16 +43,37 @@ if (image && ctx) {
 }
 
 function getPalette() {
-  colorArray = getData()
-  chooseCentroid()
+  let K = chooseCentroid(5)
+  kMeans(K);
 }
 
-function chooseCentroid() {
-  let centroid = 3;
+function chooseCentroid(centroid:number) {
+  let centroids = [centroid] 
   for(let i=0; i<centroid; ++i) {
-    let test = Math.floor(Math.random() * 9999)
+    centroids[i] = Math.floor(Math.random() * 9999)
   }
+  return centroids
 }
+
+function kMeans(K:Array<number>) {
+  colorArray = getColors()
+  console.log(colorArray)
+
+  for (let i=0; i<colorArray.length-1; ++i) {
+  let centroid = 0;
+
+    for (let i=0; i<K.length-1; ++i) {
+      let x = Math.pow((colorArray[K[i]][0]-colorArray[i][0]), 2)
+      let y = Math.pow((colorArray[K[i]][1]-colorArray[i][1]), 2)
+      let z = Math.pow((colorArray[K[i]][2]-colorArray[i][2]), 2)
+      let distance = Math.sqrt(x+y+z)
+      
+      centroid = Math.min(centroid, distance)
+    }
+  }
+    
+}
+
 
 
 
