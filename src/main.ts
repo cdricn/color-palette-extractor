@@ -57,20 +57,29 @@ function chooseCentroid(centroid:number) {
 
 function kMeans(K:Array<number>) {
   colorArray = getColors()
-  console.log(colorArray)
+  let clusterArray: number[][] = Array.from({ length: K.length }, () => []);
 
   for (let i=0; i<colorArray.length-1; ++i) {
-  let centroid = 0;
+  let current = 0;
+  let centroid = Infinity;
 
-    for (let i=0; i<K.length-1; ++i) {
-      let x = Math.pow((colorArray[K[i]][0]-colorArray[i][0]), 2)
-      let y = Math.pow((colorArray[K[i]][1]-colorArray[i][1]), 2)
-      let z = Math.pow((colorArray[K[i]][2]-colorArray[i][2]), 2)
-      let distance = Math.sqrt(x+y+z)
+    for (let j=0; j<K.length; ++j) {
+      let x = Math.pow((colorArray[K[j]][0]-colorArray[i][0]), 2);
+      let y = Math.pow((colorArray[K[j]][1]-colorArray[i][1]), 2);
+      let z = Math.pow((colorArray[K[j]][2]-colorArray[i][2]), 2);
+      let distance = Math.sqrt(x+y+z);
       
-      centroid = Math.min(centroid, distance)
+      if (distance < centroid) {
+        centroid = distance;
+        current = j
+      }
+      if (j == K.length-1){
+        clusterArray[current].push(distance)
+      }
     }
   }
+
+  console.log("HI", clusterArray)
     
 }
 
